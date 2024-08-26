@@ -53,31 +53,29 @@ export default function Home() {
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
         <></>
-
-        <div className="shadow p-4 flex justify-between h-[162px] sm:h-[172px]">
-          <div className="flex flex-col justify-between h-full">
-            <div className="flex flex-col mb-5 flex-1">
-              <h3 className="text-gray-700 font-medium mb-4">
+        <div className="shadow p-4 flex justify-between h-[160px]">
+          <div className="flex-1 flex flex-col justify-between">
+            <div className="flex-1">
+              <h3 className="text-gray-700 font-medium h-12 overflow-auto text-nowrap">
+                Nome do Produto Nome do Produto Nome do Produto Nome do Produto
                 Nome do Produto
               </h3>
-              <span className="text-gray-500 text-sm h-6 font-thin mb-2.5 max-h-max">
-                Descrição do Produto Descrição do Produto Descrição do Produto
-                Descrição do Produto Descrição do Produto Descrição do Produto
-                Descrição do Produto Descrição do Produto
+              <span className="text-gray-500 text-smx font-thin">
+                Descrição do Produto Descrição
               </span>
+              {/* <span className="text-gray-700 font-medium">R$ 55,99</span> */}
             </div>
-            <span className="text-gray-700 font-medium">R$ 55,99</span>
           </div>
-          <div className="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px]">
+          <div className="flex items-center h-full">
             <img
+              className="w-[120px] h-[120px]"
               alt="Nome Produto"
               src="https://static.ifood-static.com.br/image/upload/t_low/pratos/4b154a0f-7489-4164-a281-2ad3a9d5009b/202308291821_U3T2_i.jpg"
             />
           </div>
         </div>
+        <></>
       </div>
-
-      <></>
     </main>
   );
 }
