@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 import clsx from "clsx";
 import { Search } from "lucide-react";
 
@@ -12,6 +14,18 @@ export default function AppBar({
   indexSelected,
   onChangeSelected,
 }: AppBarProps) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const [query, setQuery] = useState("");
+  const [isShowSearchInput, setShowSearchinput] = useState(false);
+
+  useEffect(() => {
+    if (isShowSearchInput) {
+      inputRef.current?.focus();
+      setQuery("");
+    }
+  }, [isShowSearchInput]);
+
   return (
     <header className="fixed right-0 left-0 top-0 bg-white">
       <div className="flex items-center justify-between p-4 shadow">
@@ -19,7 +33,10 @@ export default function AppBar({
         <h1 className="uppercase font-semibold text-sm text-gray-700">
           Nome do Local
         </h1>
-        <Search className="text-red-400" />
+        <Search
+          className="text-red-400"
+          onClick={() => setShowSearchinput((prev) => !prev)}
+        />
       </div>
       <nav className="flex px-4 items-center overflow-x-auto scrollbar-hide shadow">
         {data.map(({ id, name }, index) => {
@@ -54,16 +71,26 @@ export default function AppBar({
           );
         })}
       </nav>
-      <div className="shadow h-16 p-2 px-4">
-        <div className="relative h-full">
-          <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-            <Search className="text-red-400" />
+      <div className="relative">
+        <div
+          className={clsx(
+            "shadow h-16 p-2 px-4 absolute top-0 left-0 right-0 transform transition-transform duration-200 ease-out bg-white",
+            isShowSearchInput ? "translate-y-0" : "-translate-y-[300%]"
+          )}
+        >
+          <div className="relative h-full">
+            <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+              <Search className="text-red-400" />
+            </div>
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              type="text"
+              className="block w-full h-full rounded border p-1.5 ps-12 bg-gray-100 font-semibold focus:outline-none"
+              placeholder="Buscar no cardápio"
+            />
           </div>
-          <input
-            type="text"
-            className="block w-full h-full rounded border p-1.5 ps-12 bg-gray-100 font-semibold"
-            placeholder="Buscar no cardápio"
-          />
         </div>
       </div>
     </header>
