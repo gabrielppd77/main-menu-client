@@ -1,7 +1,7 @@
 import { useState } from "react";
 import mainContext from "@contexts/mainContext";
 
-const data = [
+const _data = [
   {
     id: "1",
     name: "Atenção!",
@@ -137,9 +137,26 @@ interface MainProviderProps {
 export default function MainProvider({ children }: MainProviderProps) {
   const [query, setQuery] = useState("");
   const [categoryIndex, setCategoryIndex] = useState(-1);
+
+  const data = _data
+    .map((d) => ({
+      ...d,
+      products: d.products.filter((p) =>
+        p.title.toLowerCase().includes(query.toLowerCase())
+      ),
+    }))
+    .filter((d) => d.products.length > 0);
+
   return (
     <Provider
-      value={{ query, setQuery, categoryIndex, setCategoryIndex, data }}
+      value={{
+        query,
+        setQuery,
+        categoryIndex,
+        setCategoryIndex,
+        data,
+        categories: _data,
+      }}
     >
       {children}
     </Provider>

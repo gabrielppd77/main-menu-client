@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import useMainContext from "@hooks/useMainContext";
 
 import clsx from "clsx";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 
 export default function AppBar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { query, setQuery, categoryIndex, setCategoryIndex, data } =
+  const { query, setQuery, categoryIndex, setCategoryIndex, categories } =
     useMainContext();
 
   const [isShowSearchInput, setShowSearchinput] = useState(false);
@@ -16,6 +16,7 @@ export default function AppBar() {
   useEffect(() => {
     if (isShowSearchInput) {
       inputRef.current?.focus();
+    } else {
       setQuery("");
     }
   }, [isShowSearchInput, setQuery]);
@@ -33,7 +34,7 @@ export default function AppBar() {
         />
       </div>
       <nav className="flex px-4 items-center overflow-x-auto scrollbar-hide shadow">
-        {data.map(({ id, name }, index) => {
+        {categories.map(({ id, name }, index) => {
           const isSelected = index === categoryIndex;
           return (
             <div
@@ -84,6 +85,9 @@ export default function AppBar() {
               className="block w-full h-full rounded border p-1.5 ps-12 bg-gray-100 font-semibold focus:outline-none"
               placeholder="Buscar no cardápio"
             />
+          </div>
+          <div className="absolute inset-y-0 end-0 flex items-center pe-7 text-red-400">
+            <X onClick={() => setShowSearchinput(false)} />
           </div>
         </div>
       </div>

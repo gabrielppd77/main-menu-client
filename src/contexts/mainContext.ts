@@ -20,6 +20,7 @@ interface MainContextProps {
   categoryIndex: number;
   setCategoryIndex: (c: number) => void;
   data: Category[];
+  categories: Category[];
 }
 
 const mainContext = createContext<MainContextProps>({
@@ -28,6 +29,7 @@ const mainContext = createContext<MainContextProps>({
   categoryIndex: -1,
   setCategoryIndex: () => undefined,
   data: [],
+  categories: [],
 });
 
 export default mainContext;
