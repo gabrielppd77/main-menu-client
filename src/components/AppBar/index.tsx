@@ -1,22 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 
+import useMainContext from "@hooks/useMainContext";
+
 import clsx from "clsx";
 import { Search } from "lucide-react";
 
-interface AppBarProps {
-  data: { id: string; name: string }[];
-  indexSelected: number;
-  onChangeSelected: (index: number) => void;
-}
-
-export default function AppBar({
-  data,
-  indexSelected,
-  onChangeSelected,
-}: AppBarProps) {
+export default function AppBar() {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const [query, setQuery] = useState("");
+  const { query, setQuery, categoryIndex, setCategoryIndex, data } =
+    useMainContext();
+
   const [isShowSearchInput, setShowSearchinput] = useState(false);
 
   useEffect(() => {
@@ -24,7 +18,7 @@ export default function AppBar({
       inputRef.current?.focus();
       setQuery("");
     }
-  }, [isShowSearchInput]);
+  }, [isShowSearchInput, setQuery]);
 
   return (
     <header className="fixed right-0 left-0 top-0 bg-white">
@@ -40,12 +34,12 @@ export default function AppBar({
       </div>
       <nav className="flex px-4 items-center overflow-x-auto scrollbar-hide shadow">
         {data.map(({ id, name }, index) => {
-          const isSelected = index === indexSelected;
+          const isSelected = index === categoryIndex;
           return (
             <div
               key={id}
               onClick={(e) => {
-                onChangeSelected(index);
+                setCategoryIndex(index);
                 e.currentTarget.scrollIntoView({
                   behavior: "smooth",
                   block: "center",

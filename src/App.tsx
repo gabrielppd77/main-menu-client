@@ -1,7 +1,13 @@
 import Home from "@pages/Home";
 
+import MainProvider from "@providers/MainProvider";
+
 function App() {
-  return <Home />;
+  return (
+    <MainProvider>
+      <Home />
+    </MainProvider>
+  );
 }
 
 export default App;
