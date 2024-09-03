@@ -8,26 +8,25 @@ import useMainContext from "@hooks/useMainContext";
 export default function Home() {
   const { categoryIndex, data } = useMainContext();
 
-  const headerRef = useRef<HTMLDivElement | null>(null);
   const categoryRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
-  //TODO: fix animation appbar
-  //TODO: fix height top animation
-
   useEffect(() => {
-    if (headerRef.current && categoryRefs.current[categoryIndex]) {
-      categoryRefs.current[categoryIndex]?.scrollIntoView({
+    if (categoryRefs.current[categoryIndex]) {
+      const offsetPosition =
+        categoryRefs.current[categoryIndex].getBoundingClientRect().top +
+        window.scrollY -
+        125;
+
+      window.scrollTo({
+        top: offsetPosition,
         behavior: "smooth",
-        block: "start",
       });
     }
   }, [categoryIndex]);
 
   return (
     <main>
-      <div ref={headerRef}>
-        <AppBar />
-      </div>
+      <AppBar />
       <div className="flex flex-col gap-2 p-4 mt-28">
         {data.map((category, index) => (
           <div

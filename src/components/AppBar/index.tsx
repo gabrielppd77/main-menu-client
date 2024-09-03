@@ -6,7 +6,9 @@ import clsx from "clsx";
 import { Search, X } from "lucide-react";
 
 export default function AppBar() {
+  const navRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const categoryRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   const { query, setQuery, categoryIndex, setCategoryIndex, categories } =
     useMainContext();
@@ -21,6 +23,24 @@ export default function AppBar() {
     }
   }, [isShowSearchInput, setQuery]);
 
+  useEffect(() => {
+    if (navRef.current && categoryRefs.current[categoryIndex]) {
+      const element = categoryRefs.current[categoryIndex];
+
+      const windowWidth = navRef.current.clientWidth;
+      const elementWidth = element.offsetWidth;
+      const elementLeft = element.offsetLeft;
+
+      const scrollToPositionX =
+        elementLeft - windowWidth / 2 + elementWidth / 2;
+
+      navRef.current.scrollTo({
+        left: scrollToPositionX,
+        behavior: "smooth",
+      });
+    }
+  }, [categoryIndex]);
+
   return (
     <header className="fixed right-0 left-0 top-0 bg-white">
       <div className="flex items-center justify-between p-4 shadow">
@@ -33,20 +53,17 @@ export default function AppBar() {
           onClick={() => setShowSearchinput((prev) => !prev)}
         />
       </div>
-      <nav className="flex px-4 items-center overflow-x-auto scrollbar-hide shadow">
+      <nav
+        ref={navRef}
+        className="flex px-4 items-center overflow-x-auto scrollbar-hide shadow"
+      >
         {categories.map(({ id, name }, index) => {
           const isSelected = index === categoryIndex;
           return (
             <div
               key={id}
-              onClick={(e) => {
-                setCategoryIndex(index);
-                e.currentTarget.scrollIntoView({
-                  behavior: "smooth",
-                  block: "center",
-                  inline: "center",
-                });
-              }}
+              ref={(el) => (categoryRefs.current[index] = el)}
+              onClick={() => setCategoryIndex(index)}
             >
               <div
                 className={clsx(
