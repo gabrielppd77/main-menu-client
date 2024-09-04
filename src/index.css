@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.swal2-container {
+  pointer-events: auto;
+  z-index: 1300;
+}

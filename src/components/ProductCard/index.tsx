@@ -1,12 +1,12 @@
 interface ProductCardProps {
-  title: string;
+  name: string;
   description: string;
   imageUrl: string;
   price: string;
 }
 
 export default function ProductCard({
-  title,
+  name,
   description,
   imageUrl,
   price,
@@ -16,7 +16,7 @@ export default function ProductCard({
       <div className="flex-1 flex flex-col justify-between">
         <div>
           <h3 className="text-gray-700 font-normal line-clamp-2 mb-2">
-            {title}
+            {name}
           </h3>
           <span className="text-gray-500 text-xs font-thin line-clamp-3">
             {description}

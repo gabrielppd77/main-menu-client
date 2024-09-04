@@ -1,26 +1,13 @@
+import { ClientResponseDTO } from "@api/client/dtos/ClientResponseDTO";
 import { createContext } from "react";
-
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  price: number;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  products: Product[];
-}
 
 interface MainContextProps {
   query: string;
   setQuery: (q: string) => void;
   categoryIndex: number;
   setCategoryIndex: (c: number) => void;
-  data: Category[];
-  categories: Category[];
+  data: ClientResponseDTO[];
+  categories: ClientResponseDTO[];
 }
 
 const mainContext = createContext<MainContextProps>({

@@ -40,7 +40,7 @@ export default function Home() {
               {category.products.map((product) => (
                 <ProductCard
                   key={product.id}
-                  title={product.title}
+                  name={product.name}
                   description={product.description}
                   imageUrl={product.imageUrl}
                   price={product.price.toLocaleString("pt-BR", {
