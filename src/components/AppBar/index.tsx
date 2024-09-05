@@ -5,13 +5,24 @@ import useMainContext from "@hooks/useMainContext";
 import clsx from "clsx";
 import { Search, X } from "lucide-react";
 
+import LinearProgress from "@components/LinearProgress";
+
+import NavItemSkeleton from "./NavItemSkeleton";
+
 export default function AppBar() {
   const navRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const categoryRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
-  const { query, setQuery, categoryIndex, setCategoryIndex, categories } =
-    useMainContext();
+  const {
+    query,
+    setQuery,
+    categoryIndex,
+    setCategoryIndex,
+    categories,
+    isFetching,
+    isLoading,
+  } = useMainContext();
 
   const [isShowSearchInput, setShowSearchinput] = useState(false);
 
@@ -57,32 +68,40 @@ export default function AppBar() {
         ref={navRef}
         className="flex px-4 items-center overflow-x-auto scrollbar-hide shadow"
       >
-        {categories.map(({ id, name }, index) => {
-          const isSelected = index === categoryIndex;
-          return (
-            <div
-              key={id}
-              ref={(el) => (categoryRefs.current[index] = el)}
-              onClick={() => setCategoryIndex(index)}
-            >
-              <div
-                className={clsx(
-                  "flex h-12 flex-col justify-center px-2.5 font-semibold transition-colors duration-300 whitespace-nowrap",
-                  isSelected ? "text-red-400" : "text-gray-400"
-                )}
-              >
-                <div>{name}</div>
-              </div>
+        {isLoading
+          ? Array.from({ length: 15 }).map((_, index) => (
+              <NavItemSkeleton key={index} />
+            ))
+          : categories.map(({ id, name }, index) => {
+              const isSelected = index === categoryIndex;
+              return (
+                <div
+                  key={id}
+                  ref={(el) => (categoryRefs.current[index] = el)}
+                  onClick={() => setCategoryIndex(index)}
+                >
+                  <div
+                    className={clsx(
+                      "flex h-12 flex-col justify-center px-2.5 font-semibold transition-colors duration-300 whitespace-nowrap",
+                      isSelected ? "text-red-400" : "text-gray-400"
+                    )}
+                  >
+                    <div>{name}</div>
+                  </div>
 
-              <div
-                className={clsx("h-1 rounded transition-colors duration-300", {
-                  ["bg-red-400"]: isSelected,
-                })}
-              />
-            </div>
-          );
-        })}
+                  <div
+                    className={clsx(
+                      "h-1 rounded transition-colors duration-300",
+                      {
+                        ["bg-red-400"]: isSelected,
+                      }
+                    )}
+                  />
+                </div>
+              );
+            })}
       </nav>
+      <div className="h-1.5">{isFetching && <LinearProgress />}</div>
       <div className="relative">
         <div
           className={clsx(

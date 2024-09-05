@@ -8,6 +8,8 @@ interface MainContextProps {
   setCategoryIndex: (c: number) => void;
   data: ClientResponseDTO[];
   categories: ClientResponseDTO[];
+  isLoading: boolean;
+  isFetching: boolean;
 }
 
 const mainContext = createContext<MainContextProps>({
@@ -17,6 +19,8 @@ const mainContext = createContext<MainContextProps>({
   setCategoryIndex: () => undefined,
   data: [],
   categories: [],
+  isLoading: false,
+  isFetching: false,
 });
 
 export default mainContext;

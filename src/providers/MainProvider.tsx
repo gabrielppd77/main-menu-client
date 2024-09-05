@@ -13,9 +13,6 @@ export default function MainProvider({ children }: MainProviderProps) {
   const [query, setQuery] = useState("");
   const [categoryIndex, setCategoryIndex] = useState(-1);
 
-  //TODO: Create loading in page.
-  //TODO: Remove required of URL image.
-  //TODO: Keep together CRUD category and Product.
   const { data: _d, isLoading, isFetching } = useClientGetAll();
   const _data = _d || [];
 
@@ -37,6 +34,8 @@ export default function MainProvider({ children }: MainProviderProps) {
         setCategoryIndex,
         data,
         categories: _data,
+        isLoading,
+        isFetching,
       }}
     >
       {children}

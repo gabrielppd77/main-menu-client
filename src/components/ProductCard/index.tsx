@@ -1,7 +1,7 @@
 interface ProductCardProps {
   name: string;
   description: string;
-  imageUrl: string;
+  imageUrl?: string;
   price: string;
 }
 
@@ -24,9 +24,11 @@ export default function ProductCard({
         </div>
         <span className="text-gray-700 font-normal">{price}</span>
       </div>
-      <div className="w-[110px] h-full">
-        <img className="rounded" alt="Nome Produto" src={imageUrl} />
-      </div>
+      {imageUrl && (
+        <div className="w-[110px] h-full">
+          <img className="rounded" alt="Nome Produto" src={imageUrl} />
+        </div>
+      )}
     </div>
   );
 }
