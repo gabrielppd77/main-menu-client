@@ -53,7 +53,7 @@ export default function AppBar() {
   }, [categoryIndex]);
 
   return (
-    <header className="fixed right-0 left-0 top-0 bg-white">
+    <header className="fixed right-0 left-0 top-0 bg-white z-10">
       <div className="flex items-center justify-between p-4 shadow">
         <div />
         <h1 className="uppercase font-semibold text-sm text-gray-700">
