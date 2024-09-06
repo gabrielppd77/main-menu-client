@@ -47,7 +47,7 @@ export default function Home() {
                       key={product.id}
                       name={product.name}
                       description={product.description}
-                      imageUrl={product.imageUrl}
+                      urlImage={product.urlImage}
                       price={product.price.toLocaleString("pt-BR", {
                         style: "currency",
                         currency: "BRL",
