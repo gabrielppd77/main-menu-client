@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import useMainContext from "@hooks/useMainContext";
 
 import clsx from "clsx";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 
 import LinearProgress from "@components/LinearProgress";
 
@@ -11,28 +11,19 @@ import NavItemSkeleton from "./NavItemSkeleton";
 
 export default function AppBar() {
   const navRef = useRef<HTMLInputElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const categoryRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   const {
-    query,
-    setQuery,
     categoryIndex,
     setCategoryIndex,
-    categories,
+    data,
+    categoriesNav,
     isFetching,
     isLoading,
+    isShowSearchField,
+    setShowSearchField,
+    setQuery,
   } = useMainContext();
-
-  const [isShowSearchInput, setShowSearchinput] = useState(false);
-
-  useEffect(() => {
-    if (isShowSearchInput) {
-      inputRef.current?.focus();
-    } else {
-      setQuery("");
-    }
-  }, [isShowSearchInput, setQuery]);
 
   useEffect(() => {
     if (navRef.current && categoryRefs.current[categoryIndex]) {
@@ -53,15 +44,22 @@ export default function AppBar() {
   }, [categoryIndex]);
 
   return (
-    <header className="fixed right-0 left-0 top-0 bg-white z-10">
+    <header className="bg-white z-10">
       <div className="flex items-center justify-between p-4 shadow">
         <div />
         <h1 className="uppercase font-semibold text-sm text-gray-700">
-          Nome do Local
+          {isLoading ? (
+            <div className="h-2.5 bg-gray-300 rounded-full w-32 animate-pulse" />
+          ) : (
+            data.companyName
+          )}
         </h1>
         <Search
           className="text-red-400"
-          onClick={() => setShowSearchinput((prev) => !prev)}
+          onClick={() => {
+            setShowSearchField(!isShowSearchField);
+            setQuery("");
+          }}
         />
       </div>
       <nav
@@ -72,7 +70,7 @@ export default function AppBar() {
           ? Array.from({ length: 15 }).map((_, index) => (
               <NavItemSkeleton key={index} />
             ))
-          : categories.map(({ id, name }, index) => {
+          : categoriesNav.map(({ id, name }, index) => {
               const isSelected = index === categoryIndex;
               return (
                 <div
@@ -102,31 +100,6 @@ export default function AppBar() {
             })}
       </nav>
       <div className="h-1.5">{isFetching && <LinearProgress />}</div>
-      <div className="relative">
-        <div
-          className={clsx(
-            "shadow h-16 p-2 px-4 absolute top-0 left-0 right-0 transform transition-transform duration-200 ease-out bg-white",
-            isShowSearchInput ? "translate-y-0" : "-translate-y-[300%]"
-          )}
-        >
-          <div className="relative h-full">
-            <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-              <Search className="text-red-400" />
-            </div>
-            <input
-              ref={inputRef}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              type="text"
-              className="block w-full h-full rounded border p-1.5 ps-12 bg-gray-100 font-semibold focus:outline-none"
-              placeholder="Buscar no cardápio"
-            />
-          </div>
-          <div className="absolute inset-y-0 end-0 flex items-center pe-7 text-red-400">
-            <X onClick={() => setShowSearchinput(false)} />
-          </div>
-        </div>
-      </div>
     </header>
   );
 }

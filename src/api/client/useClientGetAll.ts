@@ -7,14 +7,20 @@ import { ClientResponseDTO } from "./dtos/ClientResponseDTO";
 
 export const query = ["client"];
 
-export function useClientGetAll() {
+interface RequestProps {
+  params: {
+    urlSite: string;
+  };
+}
+
+export function useClientGetAll({ params }: RequestProps) {
   async function handleRequest() {
-    const response = await api.get<ClientResponseDTO[]>("/client");
+    const response = await api.get<ClientResponseDTO>("/client", { params });
     return response.data;
   }
 
   const { error, ...rest } = useQuery({
-    queryKey: query,
+    queryKey: [query, params],
     queryFn: handleRequest,
   });
 
