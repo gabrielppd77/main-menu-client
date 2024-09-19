@@ -57,7 +57,7 @@ export default function Home() {
           <img
             className="bg-blue-50 h-24 w-24 rounded-full"
             alt="Imagem da Empresa"
-            src="https://scontent.fbhz1-2.fna.fbcdn.net/v/t39.30808-1/426538230_1298798618178007_2871720099802908690_n.jpg?stp=dst-jpg_s200x200&_nc_cat=111&ccb=1-7&_nc_sid=f4b9fd&_nc_eui2=AeEFyr2n_3yuQPlcuvwlQoGAC_LYMZhJZpcL8tgxmElml2IwyHQFEIEq1W2sPYboEdst3wKgyfg-t6GnkFC4mle_&_nc_ohc=vbiIM2hRFGcQ7kNvgFCnLtu&_nc_ht=scontent.fbhz1-2.fna&_nc_gid=AWH7MxFyC1Z2BQ-pmHXbNwj&oh=00_AYCTHiuh-NsuecSdPYtmx152Dj2_YNa48Q3tg-UJ2aMDkA&oe=66F164DF"
+            src={data.companyUrlImage}
           />
           <div>
             <h1
@@ -71,7 +71,11 @@ export default function Home() {
               )}
             </h1>
             <h3 className="text-gray-700 font-normal line-clamp-2 mb-2">
-              Sua mais nova churrascaria em Ubá - MG!
+              {isLoading ? (
+                <div className="h-2.5 bg-gray-300 rounded-full w-32 animate-pulse" />
+              ) : (
+                data.companyDescription
+              )}
             </h3>
           </div>
         </div>
