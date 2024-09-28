@@ -15,15 +15,7 @@ export default function MainProvider({ children }: MainProviderProps) {
   const [categoryIndex, setCategoryIndex] = useState(-1);
   const [isShowSearchField, setShowSearchField] = useState(false);
 
-  const {
-    data: _d,
-    isLoading,
-    isFetching,
-  } = useClientGetAll({
-    params: {
-      urlSite: "liligrill",
-    },
-  });
+  const { data: _d, isLoading, isFetching } = useClientGetAll();
   const data = _d || ({} as ClientResponseDTO);
 
   const _categories = _d?.categories || [];
