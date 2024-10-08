@@ -1,14 +1,10 @@
-import Home from "@pages/Home";
-
-import MainProvider from "@providers/MainProvider";
 import QueryClientProvider from "@providers/QueryClientProvider";
+import RouterProvider from "@providers/RouterProvider";
 
 function App() {
   return (
     <QueryClientProvider>
-      <MainProvider>
-        <Home />
-      </MainProvider>
+      <RouterProvider />
     </QueryClientProvider>
   );
 }

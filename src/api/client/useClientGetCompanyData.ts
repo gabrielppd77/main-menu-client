@@ -5,11 +5,20 @@ import { extractError } from "@utils/alert";
 
 import { ClientResponseDTO } from "./dtos/ClientResponseDTO";
 
-export const query = ["client"];
+const query = ["client"];
 
-export function useClientGetAll() {
+interface RequestProps {
+  params: { companyPath: string };
+}
+
+export function useClientGetCompanyData({ params }: RequestProps) {
   async function handleRequest() {
-    const response = await api.get<ClientResponseDTO>("/client");
+    const response = await api.get<ClientResponseDTO>(
+      "/client/get-company-data",
+      {
+        params,
+      }
+    );
     return response.data;
   }
 
@@ -23,4 +32,8 @@ export function useClientGetAll() {
   }
 
   return rest;
+}
+
+export function useClientGetCompanyDataQuery() {
+  return useQuery<ClientResponseDTO>({ queryKey: query });
 }

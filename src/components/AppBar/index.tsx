@@ -1,29 +1,30 @@
 import { useEffect, useRef } from "react";
 
-import useMainContext from "@hooks/useMainContext";
-
 import clsx from "clsx";
 import { Search } from "lucide-react";
 
 import LinearProgress from "@components/LinearProgress";
-
 import NavItemSkeleton from "./NavItemSkeleton";
 
-export default function AppBar() {
+import { useClientGetCompanyDataQuery } from "@api/client/useClientGetCompanyData";
+
+interface AppBarProps {
+  categoryIndex: number;
+  changeCategoryIndex: (index: number) => void;
+  toggleOpenSearchField: () => void;
+}
+
+export default function AppBar({
+  categoryIndex,
+  changeCategoryIndex,
+  toggleOpenSearchField,
+}: AppBarProps) {
   const navRef = useRef<HTMLInputElement | null>(null);
   const categoryRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
-  const {
-    categoryIndex,
-    setCategoryIndex,
-    data,
-    categoriesNav,
-    isFetching,
-    isLoading,
-    isShowSearchField,
-    setShowSearchField,
-    setQuery,
-  } = useMainContext();
+  const { data, isLoading, isFetching } = useClientGetCompanyDataQuery();
+
+  const categories = data?.categories || [];
 
   useEffect(() => {
     if (navRef.current && categoryRefs.current[categoryIndex]) {
@@ -51,15 +52,12 @@ export default function AppBar() {
           {isLoading ? (
             <div className="h-2.5 bg-gray-300 rounded-full w-32 animate-pulse" />
           ) : (
-            data.companyName
+            data?.companyName || ""
           )}
         </h1>
         <Search
           className="text-red-400"
-          onClick={() => {
-            setShowSearchField(!isShowSearchField);
-            setQuery("");
-          }}
+          onClick={() => toggleOpenSearchField()}
         />
       </div>
       <nav
@@ -70,13 +68,13 @@ export default function AppBar() {
           ? Array.from({ length: 15 }).map((_, index) => (
               <NavItemSkeleton key={index} />
             ))
-          : categoriesNav.map(({ id, name }, index) => {
+          : categories.map(({ id, name }, index) => {
               const isSelected = index === categoryIndex;
               return (
                 <div
                   key={id}
                   ref={(el) => (categoryRefs.current[index] = el)}
-                  onClick={() => setCategoryIndex(index)}
+                  onClick={() => changeCategoryIndex(index)}
                 >
                   <div
                     className={clsx(

@@ -2,37 +2,42 @@ import { useEffect, useRef } from "react";
 import clsx from "clsx";
 
 import { Search, X } from "lucide-react";
-import useMainContext from "@hooks/useMainContext";
 
 interface SearchFieldProps {
-  fixPosition: boolean;
+  isOpen: boolean;
+  query: string;
+  setQuery: (q: string) => void;
 }
 
-export default function SearchField({ fixPosition }: SearchFieldProps) {
+export default function SearchField({
+  isOpen,
+  query,
+  setQuery,
+}: SearchFieldProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { query, setQuery, isShowSearchField, setShowSearchField } =
-    useMainContext();
+  // const { query, setQuery, isShowSearchField, setShowSearchField } =
+  //   useMainContext();
+
+  // useEffect(() => {
+  //   if (query) {
+  //     setShowSearchField(true);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [query]);
 
   useEffect(() => {
-    if (query) {
-      setShowSearchField(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
-
-  useEffect(() => {
-    if (isShowSearchField) {
+    if (isOpen) {
       inputRef.current?.focus();
     }
-  }, [isShowSearchField]);
+  }, [isOpen]);
 
   return (
     <div
       className={clsx(
         "shadow h-16 p-2 px-4 transform transition-transform duration-200 ease-out bg-white",
-        !fixPosition &&
-          (isShowSearchField ? "translate-y-0" : "-translate-y-[400%]")
+        // !fixPosition &&
+        isOpen ? "translate-y-0" : "-translate-y-[400%]"
       )}
     >
       <div className="relative h-full">
