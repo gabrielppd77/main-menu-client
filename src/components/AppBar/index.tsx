@@ -1,23 +1,25 @@
 import { useEffect, useRef } from "react";
 
 import clsx from "clsx";
-import { Search } from "lucide-react";
 
 import LinearProgress from "@components/LinearProgress";
 import NavItemSkeleton from "./NavItemSkeleton";
 
 import { useClientGetCompanyDataQuery } from "@api/client/useClientGetCompanyData";
+import SearchField from "@components/SearchField";
 
 interface AppBarProps {
+  isShow: boolean;
   categoryIndex: number;
   changeCategoryIndex: (index: number) => void;
-  toggleOpenSearchField: () => void;
+  onClickSearchField: () => void;
 }
 
 export default function AppBar({
+  isShow,
   categoryIndex,
   changeCategoryIndex,
-  toggleOpenSearchField,
+  onClickSearchField,
 }: AppBarProps) {
   const navRef = useRef<HTMLInputElement | null>(null);
   const categoryRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
@@ -45,9 +47,14 @@ export default function AppBar({
   }, [categoryIndex]);
 
   return (
-    <header className="bg-white z-10">
-      <div className="flex items-center justify-between p-4 shadow">
-        <div />
+    <header
+      className={clsx(
+        "bg-white z-10 fixed right-0 left-0 top-0",
+        "duration-300 ease-in-out",
+        isShow ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+      )}
+    >
+      <div className="flex items-center justify-center p-4 shadow">
         <h1 className="uppercase font-semibold text-sm text-gray-700">
           {isLoading ? (
             <div className="h-2.5 bg-gray-300 rounded-full w-32 animate-pulse" />
@@ -55,10 +62,6 @@ export default function AppBar({
             data?.companyName || ""
           )}
         </h1>
-        <Search
-          className="text-red-400"
-          onClick={() => toggleOpenSearchField()}
-        />
       </div>
       <nav
         ref={navRef}
@@ -98,6 +101,7 @@ export default function AppBar({
             })}
       </nav>
       <div className="h-1.5">{isFetching && <LinearProgress />}</div>
+      <SearchField onClick={onClickSearchField} />
     </header>
   );
 }

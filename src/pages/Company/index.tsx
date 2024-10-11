@@ -1,25 +1,19 @@
 import { useRef, useEffect, useState } from "react";
 
-// import clsx from "clsx";
-
 import AppBar from "@components/AppBar";
 import ProductCard from "@components/ProductCard";
-import SearchField from "@components/SearchField";
 import ProductCardSkeleton from "@components/ProductCardSkeleton";
 
-// import useMainContext from "@hooks/useMainContext";
 import { useParams } from "react-router-dom";
 import { useClientGetCompanyData } from "@api/client/useClientGetCompanyData";
 
 import { ClientResponseDTO } from "@api/client/dtos/ClientResponseDTO";
+import SearchDialog from "@components/SearchDialog";
 
 export default function Company() {
-  const [query, setQuery] = useState("");
   const [categoryIndex, setCategoryIndex] = useState(-1);
-  const [isOpenSearchField, setOpenSearchField] = useState(false);
-  // const [isShowAppBar, setIsShowAppBar] = useState(false);
-
-  // const { categoryIndex, data, categoriesMain, isLoading } = useMainContext();
+  const [isShowAppBar, setIsShowAppBar] = useState(false);
+  const [isOpenSearchDialog, setOpenSearchDialog] = useState(false);
 
   const { companyPath } = useParams();
 
@@ -29,26 +23,34 @@ export default function Company() {
     },
   });
   const data = _d || ({} as ClientResponseDTO);
-  const _categories = data.categories || [];
+  const categories = data.categories || [];
 
-  const categories = _categories
-    .map((d) => ({
-      ...d,
-      products: d.products.filter((p) =>
-        p.name.toLowerCase().includes(query.toLowerCase())
-      ),
-    }))
-    .filter((d) => d.products.length > 0);
-
+  const productsRef = useRef<HTMLDivElement | null>(null);
   const categoryRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
-  // const divRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (productsRef.current) {
+        const { top } = productsRef.current.getBoundingClientRect();
+        if (top < 150) {
+          setIsShowAppBar(true);
+        } else {
+          setIsShowAppBar(false);
+        }
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     if (categoryRefs.current[categoryIndex]) {
       const offsetPosition =
         categoryRefs.current[categoryIndex].getBoundingClientRect().top +
         window.scrollY -
-        125;
+        165;
 
       window.scrollTo({
         top: offsetPosition,
@@ -57,28 +59,55 @@ export default function Company() {
     }
   }, [categoryIndex]);
 
-  // const handleScroll = () => {
-  //   if (divRef.current) {
-  //     const { top, bottom } = divRef.current.getBoundingClientRect();
-  //     const windowHeight = window.innerHeight;
-  //     if (bottom < 0 || top > windowHeight) {
-  //       setIsShowAppBar(true);
-  //     } else {
-  //       setIsShowAppBar(false);
-  //     }
-  //   }
-  // };
-
   // useEffect(() => {
+  //   const handleScroll = () => {
+  //     let foundVisibleCategoryIndex: number | null = null;
+
+  //     Object.keys(categoryRefs.current).forEach((key, index) => {
+  //       const ref = categoryRefs.current[parseInt(key, 10)];
+  //       if (ref) {
+  //         // const rect = ref.getBoundingClientRect();
+  //         // console.log({ rect });
+  //         // if (rect.top <= window.innerHeight) {
+  //         //   foundVisibleCategoryIndex = index;
+  //         // }
+
+  //         let { top } = ref.getBoundingClientRect();
+  //         let { innerHeight } = window;
+
+  //         top -= 150;
+  //         innerHeight = (innerHeight - 150) / 2;
+
+  //         if (top > 0 && top < innerHeight) {
+  //           foundVisibleCategoryIndex = index;
+  //         }
+  //       }
+  //     });
+
+  //     if (foundVisibleCategoryIndex !== null) {
+  //       setScrollingBar(true);
+  //       setCategoryIndex(foundVisibleCategoryIndex);
+  //     }
+  //   };
   //   window.addEventListener("scroll", handleScroll);
   //   return () => {
   //     window.removeEventListener("scroll", handleScroll);
   //   };
   // }, []);
 
+  function handleOpenSearchDialog() {
+    setOpenSearchDialog(true);
+    document.body.style.overflow = "hidden";
+  }
+
+  function handleCloseSearchDialog() {
+    setOpenSearchDialog(false);
+    document.body.style.overflow = "auto";
+  }
+
   return (
     <main>
-      {/* <div className="h-48 w-full flex justify-center items-center px-2 fixed">
+      <div className="h-48 w-full flex justify-center items-center px-2">
         <div className="flex items-center gap-2">
           <img
             className="bg-blue-50 h-24 w-24 rounded-full"
@@ -86,10 +115,7 @@ export default function Company() {
             src={data.companyUrlImage}
           />
           <div>
-            <h1
-              className="uppercase font-semibold text-lg text-gray-700"
-              ref={divRef}
-            >
+            <h1 className="uppercase font-semibold text-lg text-gray-700">
               {isLoading ? (
                 <div className="h-2.5 bg-gray-300 rounded-full w-32 animate-pulse" />
               ) : (
@@ -106,22 +132,22 @@ export default function Company() {
           </div>
         </div>
       </div>
-      <div className="h-0.5 w-full bg-gray-200" /> */}
-      {/* <div className="right-0 left-0"> */}
-      <SearchField
-        isOpen={isOpenSearchField}
-        query={query}
-        setQuery={setQuery}
-      />
+
+      <div className="h-0.5 w-full bg-gray-200" />
 
       <AppBar
         categoryIndex={categoryIndex}
         changeCategoryIndex={setCategoryIndex}
-        toggleOpenSearchField={() => setOpenSearchField((prev) => !prev)}
+        isShow={isShowAppBar}
+        onClickSearchField={handleOpenSearchDialog}
       />
 
-      {/* </div> */}
-      <div className="flex flex-col gap-2 p-4">
+      <SearchDialog
+        isOpen={isOpenSearchDialog}
+        onClose={handleCloseSearchDialog}
+      />
+
+      <div className="flex flex-col gap-2 p-4" ref={productsRef}>
         {isLoading
           ? Array.from({ length: 15 }).map((_, index) => (
               <ProductCardSkeleton key={index} />
