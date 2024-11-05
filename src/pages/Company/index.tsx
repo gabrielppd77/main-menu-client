@@ -9,6 +9,7 @@ import { useClientGetCompanyData } from "@api/client/useClientGetCompanyData";
 
 import { ClientResponseDTO } from "@api/client/dtos/ClientResponseDTO";
 import SearchDialog from "@components/SearchDialog";
+import Typography from "@components/Typography";
 
 export default function Company() {
   const [categoryIndex, setCategoryIndex] = useState(-1);
@@ -157,9 +158,7 @@ export default function Company() {
                 key={category.id}
                 ref={(el) => (categoryRefs.current[index] = el)}
               >
-                <h2 className="text-gray-700 font-medium text-lg line-clamp-2 mb-2">
-                  {category.name}
-                </h2>
+                <Typography>{category.name}</Typography>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {category.products.map((product) => (
                     <ProductCard
