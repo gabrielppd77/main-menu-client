@@ -3,7 +3,7 @@ import clsx from "clsx";
 interface AvatarProps {
   alt?: string;
   image?: string;
-  size?: "normal" | "large";
+  size?: "small" | "normal" | "large";
   squad?: boolean;
   isLoading?: boolean;
 }
@@ -16,6 +16,7 @@ export default function Avatar({
   isLoading,
 }: AvatarProps) {
   const size = {
+    ["small"]: "size-20",
     ["normal"]: "size-24",
     ["large"]: "size-28",
   };
