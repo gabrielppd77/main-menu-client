@@ -1,30 +1,28 @@
 import { useClientGetAllCompanies } from "@api/client/useClientGetAllCompanies";
 import { useNavigate } from "react-router-dom";
 
-import Typography from "@components/Typography";
-
-import Navbar from "./Navbar";
 import clsx from "clsx";
 
 import Avatar from "@components/Avatar";
 import { Star } from "lucide-react";
 import Container from "@components/Container";
-import Navbar2 from "./Navbar2";
 import Footer from "./Footer";
 
 export default function Home() {
-  const { data: _d, isLoading, isFetching } = useClientGetAllCompanies();
+  const { data: _d } = useClientGetAllCompanies();
   const navigate = useNavigate();
 
   const data = [..._d, ..._d, ..._d, ..._d, ..._d, ..._d, ..._d];
 
   return (
-    <main>
-      <Navbar />
-      <Navbar2 />
+    <main className="flex h-screen flex-col justify-between">
+      {/* <Navbar />
+      <Navbar2 /> */}
 
       <Container>
-        <Typography>Lojas</Typography>
+        <h2 className="text-gray-700 font-medium text-lg line-clamp-2 mb-2">
+          Lojas
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {data.map((d) => (
@@ -39,7 +37,9 @@ export default function Home() {
               <Avatar image={d.companyUrlImage} size="small" />
               <div className="flex items-center">
                 <div>
-                  <Typography>{d.companyName}</Typography>
+                  <div className="text-gray-700 font-medium text-md line-clamp-2 mb-2">
+                    {d.companyName}
+                  </div>
                   <div className="flex gap-2">
                     <Star className="text-yellow-300 size-5" />
                     <div>5.0</div>
