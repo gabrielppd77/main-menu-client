@@ -100,7 +100,7 @@ export default function AppBar({
               );
             })}
       </nav>
-      <div className="h-1.5">{isFetching && <LinearProgress />}</div>
+      <LinearProgress active={isFetching} />
       <SearchField onClick={onClickSearchField} />
     </header>
   );

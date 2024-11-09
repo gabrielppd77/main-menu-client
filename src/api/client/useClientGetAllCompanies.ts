@@ -18,7 +18,6 @@ export function useClientGetAllCompanies() {
   const { error, ...rest } = useQuery({
     queryKey: query,
     queryFn: handleRequest,
-    initialData: [],
   });
 
   if (error) {
