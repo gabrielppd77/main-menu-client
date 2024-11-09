@@ -1,4 +1,4 @@
-export default function Navbar2() {
+export default function Navbar() {
   return (
     <nav className="bg-white border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">

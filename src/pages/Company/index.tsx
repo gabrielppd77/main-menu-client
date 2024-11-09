@@ -1,8 +1,9 @@
 import { useRef, useEffect, useState } from "react";
 
 import AppBar from "@components/AppBar";
-import ProductCard from "@components/ProductCard";
-import ProductCardSkeleton from "@components/ProductCardSkeleton";
+import ProductCard, {
+  ProductCardSkeleton,
+} from "@pages/Company/components/ProductCard";
 
 import { useParams } from "react-router-dom";
 import { useClientGetCompanyData } from "@api/client/useClientGetCompanyData";
@@ -115,7 +116,7 @@ export default function Company() {
             src={data.companyUrlImage}
           />
           <div>
-            <h1 className="uppercase font-semibold text-lg text-gray-700">
+            <h1 className="font-semibold text-lg text-gray-700">
               {isLoading ? (
                 <div className="h-2.5 bg-gray-300 rounded-full w-32 animate-pulse" />
               ) : (

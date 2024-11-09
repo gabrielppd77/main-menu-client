@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      height: {
+        "nav-height": "4rem",
+      },
       keyframes: {
         progress: {
           "0%": { transform: " translateX(0) scaleX(0)" },

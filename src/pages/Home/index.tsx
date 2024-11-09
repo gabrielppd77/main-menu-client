@@ -2,9 +2,11 @@ import { useClientGetAllCompanies } from "@api/client/useClientGetAllCompanies";
 import { useNavigate } from "react-router-dom";
 
 import Container from "@components/Container";
+import LinearProgress from "@components/LinearProgress";
+
+import Navbar from "./Navbar";
 import CompanyCard, { CompanyCardSkeleton } from "./components/CompanyCard";
 import Footer from "./Footer";
-import LinearProgress from "@components/LinearProgress";
 
 export default function Home() {
   const { data: _d, isLoading, isFetching } = useClientGetAllCompanies();
@@ -14,6 +16,9 @@ export default function Home() {
 
   return (
     <main>
+      <Navbar />
+      <div className="h-nav-height" />
+
       <Container className="flex h-screen flex-col justify-between">
         <div>
           <h2 className="text-gray-700 font-medium text-lg mb-2">Lojas</h2>
