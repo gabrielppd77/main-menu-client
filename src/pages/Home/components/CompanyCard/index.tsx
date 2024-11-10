@@ -33,7 +33,9 @@ export default function CompanyCard({
     >
       <Avatar image={image} />
       <div className="flex items-center">
-        <div className="text-gray-700 font-medium text-md">{name}</div>
+        <div className="text-gray-700 font-medium text-md line-clamp-1">
+          {name}
+        </div>
       </div>
     </div>
   );

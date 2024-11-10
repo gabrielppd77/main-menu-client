@@ -7,11 +7,11 @@ export default function FinalFooter() {
         © 2024 <a>RiceAndBeans™</a>. All Rights Reserved.
       </span>
       <div className="flex mt-4 space-x-5 rtl:space-x-reverse">
-        <a href="#" className="text-gray-400 hover:text-gray-900">
+        <a href="/" className="text-gray-400 hover:text-gray-900">
           <Facebook />
           <span className="sr-only">Facebook page</span>
         </a>
-        <a href="#" className="text-gray-400 hover:text-gray-900">
+        <a href="/" className="text-gray-400 hover:text-gray-900">
           <Instagram />
           <span className="sr-only">GitHub account</span>
         </a>
