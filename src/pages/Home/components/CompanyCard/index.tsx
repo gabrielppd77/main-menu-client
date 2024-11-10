@@ -31,7 +31,7 @@ export default function CompanyCard({
         "hover:shadow-md hover:scale-105 hover:cursor-pointer transition ease-in-out duration-200"
       )}
     >
-      <Avatar image={image} />
+      <Avatar image={image} alt="icone da loja" />
       <div className="flex items-center">
         <div className="text-gray-700 font-medium text-md line-clamp-1">
           {name}
