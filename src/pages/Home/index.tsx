@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Container from "@components/Container";
 import LinearProgress from "@components/LinearProgress";
 
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar";
 import CompanyCard, { CompanyCardSkeleton } from "./components/CompanyCard";
-import Footer from "./Footer";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const { data: _d, isLoading, isFetching } = useClientGetAllCompanies();

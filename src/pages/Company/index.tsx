@@ -3,10 +3,12 @@ import { useRef, useState } from "react";
 import Divider from "@components/Divider";
 import LinearProgress from "@components/LinearProgress";
 
-import HeaderCompany, { HeaderCompanySkeleton } from "./HeaderCompany";
+import HeaderCompany, {
+  HeaderCompanySkeleton,
+} from "./components/HeaderCompany";
 import NavCategory from "./components/NavCategory";
-import ProductCard, { ProductCardSkeleton } from "./components/ProductCard";
 import SearchField from "./components/SearchField";
+import ProductCard, { ProductCardSkeleton } from "./components/ProductCard";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useClientGetCompanyData } from "@api/client/useClientGetCompanyData";
