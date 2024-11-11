@@ -1,6 +1,8 @@
+import { HttpStatusCode } from "axios";
+
 export interface ProblemDetails {
   type: string;
-  status: number;
+  status: HttpStatusCode;
   title: string;
   detail: string;
   instance: string;

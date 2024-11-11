@@ -27,7 +27,3 @@ export function useClientGetCompanyData({ params }: RequestProps) {
     retry: false,
   });
 }
-
-export function useClientGetCompanyDataQuery() {
-  return useQuery<ClientResponseDTO>({ queryKey: query });
-}

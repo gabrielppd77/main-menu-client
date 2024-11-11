@@ -1,18 +1,23 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import Divider from "@components/Divider";
 import LinearProgress from "@components/LinearProgress";
 
 import HeaderCompany, { HeaderCompanySkeleton } from "./HeaderCompany";
+import NavCategory from "./components/NavCategory";
 import ProductCard, { ProductCardSkeleton } from "./components/ProductCard";
+import SearchField from "./components/SearchField";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useClientGetCompanyData } from "@api/client/useClientGetCompanyData";
 
 import { ClientResponseDTO } from "@api/client/dtos/ClientResponseDTO";
+import { extractRequestError } from "@utils/utils";
+import { HttpStatusCode } from "axios";
+import { fireAlertError } from "@utils/alert";
 
 export default function Company() {
-  // const [categoryIndex, setCategoryIndex] = useState(-1);
+  const [categoryIndex, setCategoryIndex] = useState(0);
   // const [isShowAppBar, setIsShowAppBar] = useState(false);
   // const [isOpenSearchDialog, setOpenSearchDialog] = useState(false);
 
@@ -30,8 +35,14 @@ export default function Company() {
     },
   });
 
-  if (error) {
-    navigate("/");
+  const errExtracted = extractRequestError(error);
+
+  if (errExtracted) {
+    if (errExtracted.status === HttpStatusCode.NotFound) {
+      navigate("/");
+    } else {
+      fireAlertError(error);
+    }
   }
 
   const data = _d || ({} as ClientResponseDTO);
@@ -133,18 +144,22 @@ export default function Company() {
 
       <LinearProgress active={isFetching} />
 
-      {/* <AppBar
+      <NavCategory
         categoryIndex={categoryIndex}
         changeCategoryIndex={setCategoryIndex}
-        isShow={isShowAppBar}
-        onClickSearchField={handleOpenSearchDialog}
+        isLoading={isLoading}
+        categories={data?.categories || []}
       />
 
-      <SearchDialog
-        isOpen={isOpenSearchDialog}
-        onClose={handleCloseSearchDialog}
-      />
-*/}
+      <SearchField onClick={() => undefined} />
+
+      {/* <AppBar
+        // categoryIndex={categoryIndex}
+        // changeCategoryIndex={setCategoryIndex}
+        isShow={true}
+        // onClickSearchField={handleOpenSearchDialog}
+      /> */}
+
       <div className="flex flex-col gap-2 p-4" ref={productsRef}>
         {isLoading
           ? Array.from({ length: 15 }).map((_, index) => (

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import api from "../api";
-import { extractError } from "@utils/alert";
+import { fireAlertError } from "@utils/alert";
 
 import { ClientResponseDTO } from "./dtos/ClientResponseDTO";
 
@@ -21,7 +21,7 @@ export function useClientGetAllCompanies() {
   });
 
   if (error) {
-    extractError(error);
+    fireAlertError(error);
   }
 
   return rest;
