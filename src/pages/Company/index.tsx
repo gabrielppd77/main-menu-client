@@ -1,13 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+import { ChevronLeft, Search } from "lucide-react";
 
 import Divider from "@components/Divider";
-import LinearProgress from "@components/LinearProgress";
+import IconButton from "@components/IconButton";
 
 import HeaderCompany, {
   HeaderCompanySkeleton,
 } from "./components/HeaderCompany";
 import NavCategory from "./components/NavCategory";
-import SearchField from "./components/SearchField";
 import ProductCard, { ProductCardSkeleton } from "./components/ProductCard";
 
 import { useParams, useNavigate } from "react-router-dom";
@@ -17,11 +18,11 @@ import { ClientResponseDTO } from "@api/client/dtos/ClientResponseDTO";
 import { extractRequestError } from "@utils/utils";
 import { HttpStatusCode } from "axios";
 import { fireAlertError } from "@utils/alert";
+import clsx from "clsx";
 
 export default function Company() {
   const [categoryIndex, setCategoryIndex] = useState(0);
-  // const [isShowAppBar, setIsShowAppBar] = useState(false);
-  // const [isOpenSearchDialog, setOpenSearchDialog] = useState(false);
+  const [isShowAppBar, setIsShowAppBar] = useState(false);
 
   const { companyPath } = useParams();
   const navigate = useNavigate();
@@ -53,85 +54,91 @@ export default function Company() {
   const productsRef = useRef<HTMLDivElement | null>(null);
   const categoryRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (productsRef.current) {
-  //       const { top } = productsRef.current.getBoundingClientRect();
-  //       if (top < 150) {
-  //         setIsShowAppBar(true);
-  //       } else {
-  //         setIsShowAppBar(false);
-  //       }
-  //     }
-  //   };
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (productsRef.current) {
+        const { top } = productsRef.current.getBoundingClientRect();
+        if (top < 100) {
+          setIsShowAppBar(true);
+        } else {
+          setIsShowAppBar(false);
+        }
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
-  // useEffect(() => {
-  //   if (categoryRefs.current[categoryIndex]) {
-  //     const offsetPosition =
-  //       categoryRefs.current[categoryIndex].getBoundingClientRect().top +
-  //       window.scrollY -
-  //       165;
+  useEffect(() => {
+    if (categoryIndex === 0) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } else {
+      if (categoryRefs.current[categoryIndex]) {
+        const offsetPosition =
+          categoryRefs.current[categoryIndex].getBoundingClientRect().top +
+          window.scrollY -
+          165;
 
-  //     window.scrollTo({
-  //       top: offsetPosition,
-  //       behavior: "smooth",
-  //     });
-  //   }
-  // }, [categoryIndex]);
-
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     let foundVisibleCategoryIndex: number | null = null;
-
-  //     Object.keys(categoryRefs.current).forEach((key, index) => {
-  //       const ref = categoryRefs.current[parseInt(key, 10)];
-  //       if (ref) {
-  //         // const rect = ref.getBoundingClientRect();
-  //         // console.log({ rect });
-  //         // if (rect.top <= window.innerHeight) {
-  //         //   foundVisibleCategoryIndex = index;
-  //         // }
-
-  //         let { top } = ref.getBoundingClientRect();
-  //         let { innerHeight } = window;
-
-  //         top -= 150;
-  //         innerHeight = (innerHeight - 150) / 2;
-
-  //         if (top > 0 && top < innerHeight) {
-  //           foundVisibleCategoryIndex = index;
-  //         }
-  //       }
-  //     });
-
-  //     if (foundVisibleCategoryIndex !== null) {
-  //       setScrollingBar(true);
-  //       setCategoryIndex(foundVisibleCategoryIndex);
-  //     }
-  //   };
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
-
-  // function handleOpenSearchDialog() {
-  //   setOpenSearchDialog(true);
-  //   document.body.style.overflow = "hidden";
-  // }
-
-  // function handleCloseSearchDialog() {
-  //   setOpenSearchDialog(false);
-  //   document.body.style.overflow = "auto";
-  // }
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [categoryIndex]);
 
   return (
     <main>
+      <header
+        className={clsx(
+          "bg-white z-10 fixed right-0 left-0 top-0",
+          "duration-300 ease-in-out",
+          isShowAppBar
+            ? "translate-y-0 opacity-100"
+            : "-translate-y-full opacity-0"
+        )}
+      >
+        <div className="flex items-center justify-between p-4 shadow">
+          <IconButton onClick={() => navigate("/")}>
+            <ChevronLeft />
+          </IconButton>
+
+          <h1 className="font-semibold text-sm text-gray-700">
+            {isLoading ? (
+              <div className="h-2.5 bg-gray-300 rounded-full w-32 animate-pulse" />
+            ) : (
+              data?.companyName || ""
+            )}
+          </h1>
+          <IconButton>
+            <Search />
+          </IconButton>
+        </div>
+
+        <NavCategory
+          categoryIndex={categoryIndex}
+          changeCategoryIndex={setCategoryIndex}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          categories={data?.categories || []}
+        />
+      </header>
+
+      <div className="absolute left-0 right-0 flex justify-between p-3 px-4">
+        <IconButton onClick={() => navigate("/")}>
+          <ChevronLeft />
+        </IconButton>
+
+        <IconButton>
+          <Search />
+        </IconButton>
+      </div>
+
       {isLoading ? (
         <HeaderCompanySkeleton />
       ) : (
@@ -144,23 +151,13 @@ export default function Company() {
 
       <Divider />
 
-      <LinearProgress active={isFetching} />
-
       <NavCategory
         categoryIndex={categoryIndex}
         changeCategoryIndex={setCategoryIndex}
         isLoading={isLoading}
+        isFetching={isFetching}
         categories={data?.categories || []}
       />
-
-      <SearchField onClick={() => undefined} />
-
-      {/* <AppBar
-        // categoryIndex={categoryIndex}
-        // changeCategoryIndex={setCategoryIndex}
-        isShow={true}
-        // onClickSearchField={handleOpenSearchDialog}
-      /> */}
 
       <div className="flex flex-col gap-2 p-4" ref={productsRef}>
         {isLoading

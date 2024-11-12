@@ -1,13 +1,15 @@
 import { useEffect, useRef } from "react";
 
-import clsx from "clsx";
+import LinearProgress from "@components/LinearProgress";
 
-import NavItemSkeleton from "./NavItem";
+import NavItem, { NavItemSkeleton } from "./NavItem";
 
 import { ClientCategoryResponseDTO } from "@api/client/dtos/ClientCategoryResponseDTO";
+import Divider from "@components/Divider";
 
 interface NavCategoryProps {
   isLoading: boolean;
+  isFetching: boolean;
   categoryIndex: number;
   changeCategoryIndex: (index: number) => void;
   categories: ClientCategoryResponseDTO[];
@@ -15,6 +17,7 @@ interface NavCategoryProps {
 
 export default function NavCategory({
   isLoading,
+  isFetching,
   categoryIndex,
   changeCategoryIndex,
   categories,
@@ -41,42 +44,33 @@ export default function NavCategory({
   }, [categoryIndex]);
 
   return (
-    <nav
-      ref={navRef}
-      className="flex px-4 items-center overflow-x-auto scrollbar-hide shadow"
-    >
-      {isLoading
-        ? Array.from({ length: 15 }).map((_, index) => (
-            <NavItemSkeleton key={index} />
-          ))
-        : categories.map(({ id, name }, index) => {
-            const isSelected = index === categoryIndex;
-            return (
-              <div
-                key={id}
-                ref={(el) => (categoryRefs.current[index] = el)}
-                onClick={() => changeCategoryIndex(index)}
-              >
-                <div
-                  className={clsx(
-                    "flex h-12 flex-col justify-center px-2.5 font-semibold transition-colors duration-300 whitespace-nowrap",
-                    isSelected ? "text-red-400" : "text-gray-400"
-                  )}
-                >
-                  <div>{name}</div>
-                </div>
+    <div>
+      <div className="-mt-1">
+        <LinearProgress active={isFetching} />
+      </div>
 
+      <nav
+        ref={navRef}
+        className="flex px-2 items-center overflow-x-auto scrollbar-hide"
+      >
+        {isLoading
+          ? Array.from({ length: 15 }).map((_, index) => (
+              <NavItemSkeleton key={index} />
+            ))
+          : categories.map(({ id, name }, index) => {
+              const isSelected = index === categoryIndex;
+              return (
                 <div
-                  className={clsx(
-                    "h-1 rounded transition-colors duration-300",
-                    {
-                      ["bg-red-400"]: isSelected,
-                    }
-                  )}
-                />
-              </div>
-            );
-          })}
-    </nav>
+                  key={id}
+                  ref={(el) => (categoryRefs.current[index] = el)}
+                  onClick={() => changeCategoryIndex(index)}
+                >
+                  <NavItem name={name} isSelected={isSelected} />
+                </div>
+              );
+            })}
+      </nav>
+      <Divider />
+    </div>
   );
 }
