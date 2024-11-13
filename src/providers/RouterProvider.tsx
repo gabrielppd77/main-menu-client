@@ -5,6 +5,7 @@ import {
 
 import Home from "@pages/Home";
 import Company from "@pages/Company";
+import SearchProduct from "@pages/SearchProduct";
 
 const routes = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const routes = createBrowserRouter([
   {
     path: "/:companyPath",
     element: <Company />,
+  },
+  {
+    path: "/:companyPath/search",
+    element: <SearchProduct />,
   },
 ]);
 

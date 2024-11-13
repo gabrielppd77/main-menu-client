@@ -92,6 +92,14 @@ export default function Company() {
     }
   }, [categoryIndex]);
 
+  function goToHome() {
+    navigate("/");
+  }
+
+  function goToSearchProduct() {
+    navigate(`/${companyPath}/search`);
+  }
+
   return (
     <main>
       <header
@@ -104,7 +112,7 @@ export default function Company() {
         )}
       >
         <div className="flex items-center justify-between p-4 shadow">
-          <IconButton onClick={() => navigate("/")}>
+          <IconButton onClick={goToHome}>
             <ChevronLeft />
           </IconButton>
 
@@ -115,7 +123,7 @@ export default function Company() {
               data?.companyName || ""
             )}
           </h1>
-          <IconButton>
+          <IconButton onClick={goToSearchProduct}>
             <Search />
           </IconButton>
         </div>
@@ -125,16 +133,16 @@ export default function Company() {
           changeCategoryIndex={setCategoryIndex}
           isLoading={isLoading}
           isFetching={isFetching}
-          categories={data?.categories || []}
+          categories={categories}
         />
       </header>
 
       <div className="absolute left-0 right-0 flex justify-between p-3 px-4">
-        <IconButton onClick={() => navigate("/")}>
+        <IconButton onClick={goToHome}>
           <ChevronLeft />
         </IconButton>
 
-        <IconButton>
+        <IconButton onClick={goToSearchProduct}>
           <Search />
         </IconButton>
       </div>
@@ -156,7 +164,7 @@ export default function Company() {
         changeCategoryIndex={setCategoryIndex}
         isLoading={isLoading}
         isFetching={isFetching}
-        categories={data?.categories || []}
+        categories={categories}
       />
 
       <div className="flex flex-col gap-2 p-4" ref={productsRef}>

@@ -7,10 +7,14 @@ import { ClientResponseDTO } from "./dtos/ClientResponseDTO";
 const query = ["client"];
 
 interface RequestProps {
-  params: { companyPath: string };
+  enabled?: boolean;
+  params: { companyPath: string; query?: string };
 }
 
-export function useClientGetCompanyData({ params }: RequestProps) {
+export function useClientGetCompanyData({
+  enabled = true,
+  params,
+}: RequestProps) {
   async function handleRequest() {
     const response = await api.get<ClientResponseDTO>(
       "/client/get-company-data",
@@ -25,5 +29,6 @@ export function useClientGetCompanyData({ params }: RequestProps) {
     queryKey: query,
     queryFn: handleRequest,
     retry: false,
+    enabled,
   });
 }
