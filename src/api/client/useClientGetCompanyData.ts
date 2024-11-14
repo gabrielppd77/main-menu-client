@@ -26,7 +26,7 @@ export function useClientGetCompanyData({
   }
 
   return useQuery({
-    queryKey: query,
+    queryKey: [query, params],
     queryFn: handleRequest,
     retry: false,
     enabled,

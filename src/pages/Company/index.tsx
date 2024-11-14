@@ -9,7 +9,6 @@ import HeaderCompany, {
   HeaderCompanySkeleton,
 } from "./components/HeaderCompany";
 import NavCategory from "./components/NavCategory";
-import ProductCard, { ProductCardSkeleton } from "./components/ProductCard";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useClientGetCompanyData } from "@api/client/useClientGetCompanyData";
@@ -19,6 +18,7 @@ import { extractRequestError } from "@utils/utils";
 import { HttpStatusCode } from "axios";
 import { fireAlertError } from "@utils/alert";
 import clsx from "clsx";
+import ListProducts from "./components/ListProducts";
 
 export default function Company() {
   const [categoryIndex, setCategoryIndex] = useState(0);
@@ -167,36 +167,12 @@ export default function Company() {
         categories={categories}
       />
 
-      <div className="flex flex-col gap-2 p-4" ref={productsRef}>
-        {isLoading
-          ? Array.from({ length: 15 }).map((_, index) => (
-              <ProductCardSkeleton key={index} />
-            ))
-          : categories.map((category, index) => (
-              <div
-                key={category.id}
-                ref={(el) => (categoryRefs.current[index] = el)}
-              >
-                <div className="text-gray-700 font-medium text-lg line-clamp-2 mb-2">
-                  {category.name}
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {category.products.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      name={product.name}
-                      description={product.description}
-                      urlImage={product.urlImage}
-                      price={product.price.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      })}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-      </div>
+      <ListProducts
+        data={categories}
+        isLoading={isLoading}
+        categoryRefs={categoryRefs}
+        ref={productsRef}
+      />
     </main>
   );
 }
